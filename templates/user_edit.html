@@ -9,15 +9,33 @@
 <form action="/users/{{user.id}}/edit" method="POST">
     <div class="form-group">
         <label for="first-name">First Name</label>
-        <input type="text" class="form-control" id="first-name" aria-describedby="firstNameHelp" placeholder={{user.first_name}}>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="first-name" 
+          name="first_name"
+          aria-describedby="firstNameHelp" 
+          placeholder={{user.first_name}}>
       </div>
       <div class="form-group">
         <label for="last-name">Last Name</label>
-        <input type="text" class="form-control" id="last-name" aria-describedby="lastNameHelp" placeholder={{user.last_name}}>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="last-name" 
+          name="last_name"
+          aria-describedby="lastNameHelp" 
+          placeholder={{user.last_name}}>
       </div>
       <div class="form-group">
         <label for="image">Image URL</label>
-        <input type="url" class="form-control" id="image" aria-describedby="imageHelp" placeholder={{user.image_url}}>
+        <input 
+          type="url" 
+          class="form-control" 
+          id="image" 
+          name="image_url"
+          aria-describedby="imageHelp" 
+          placeholder={{user.image_url}}>
       </div>
       <a class="btn btn-link" href="/users/{{user.id}}" role="button">Cancel</a>
       <button type="submit" class="btn btn-success">Save</button>

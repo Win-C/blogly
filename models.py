@@ -30,3 +30,16 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.id} {self.first_name} {self.last_name}>"
+
+    def is_not_same_or_empty(self, value, col_name):
+        """ Checks if value passed in already exists in the record or 
+            is an empty string
+            Returns: False, if exists in record or ''
+                     True, otherwise
+        """
+        # Note: may need to mock a db to test function, come back to this
+
+        if (self.col_name is value) or (self.col_name == ''):
+            return False
+
+        return True

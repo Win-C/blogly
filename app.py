@@ -27,7 +27,7 @@ def show_users():
     """ Get list of users and show all users. """
 
     users = User.query.all()
-    return render_template('user_list.html', users = users)
+    return render_template('user_list.html', users=users)
 
 
 @app.route('/users/new')
@@ -46,19 +46,69 @@ def create_user():
     image_url = request.form['image_url']
 
     user = User(
-        first_name = first_name, 
-        last_name = last_name, 
-        image_url = image_url)
+        first_name=first_name,
+        last_name=last_name,
+        image_url=image_url)
+
+    db.session.add(user)
+    db.session.commit()
 
     return redirect('/users')
 
 
 @app.route('/users/<int:user_id>')
 def show_user_detail(user_id):
-    """ Show detail information about a specific user and buttons to edit/ 
+    """ Show detail information about a specific user and buttons to edit/
     delete user """
-    
+
     user = User.query.get(user_id)
-    
+
     # TO DO: check if we can just input 'user' here
-    return render_template('user_detail.html', user = user)
+    return render_template('user_detail.html', user=user)
+
+
+@app.route('/users/<int:user_id>/edit')
+def show_user_edit(user_id):
+    """ Show the edit page for a specific user and buttons to return to
+        the detail page for a user and save button that updates the user
+     """
+
+    user = User.query.get(user_id)
+
+    return render_template('user_edit.html', user=user)
+
+
+@app.route('/users/<int:user_id>/edit', methods=['POST'])
+def show_edit_form(user_id):
+    """ Process the edit form and returns the user to the /users page """
+
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    image_url = request.form['image_url']
+
+    user = User.query.get(user_id)
+
+    if user.is_not_same_or_empty(first_name, 'first_name'):
+        user.first_name = first_name
+
+    if user.is_not_same_or_empty(last_name, 'last_name'):
+        user.last_name = last_name
+
+    if user.is_not_same_or_empty(image_url, 'image_url'):
+        user.image_url = image_url
+
+    db.session.commit()
+
+    return redirect('/users')
+
+
+@app.route('/users/<int:user_id>/delete', methods=['POST'])
+def show_user_edit(user_id):
+    """ Delete the user """
+
+    user = User.query.get(user_id)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect('/users')
