@@ -15,3 +15,4 @@ db.create_all()
 
 debug = DebugToolbarExtension(app)
 
+
