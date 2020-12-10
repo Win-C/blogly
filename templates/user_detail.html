@@ -10,11 +10,18 @@
         </div>
         <div class="col-9">
             <h1>{{user.first_name}} {{user.last_name}}</h1>
-            <form action="/users/{{user.id}}/edit">
-                <button type='submit' class="btn btn-primary">Edit</button>
-            </form>
-            <form action="/users/{{user.id}}/delete" method="POST">
-                <button type='submit' class="btn btn-danger">Delete</button>
+            <form>
+                <button 
+                    type='submit' 
+                    class="btn btn-primary" 
+                    formaction="/users/{{user.id}}/edit">
+                    Edit</button>
+                <button 
+                    type='submit' 
+                    class="btn btn-danger"
+                    formaction="/users/{{user.id}}/delete"
+                    formmethod="POST">
+                    Delete</button>
             </form>
         </div>
     </div>

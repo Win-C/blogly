@@ -11,13 +11,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
+db.drop_all()
 db.create_all()
 
 debug = DebugToolbarExtension(app)
 
 
 @app.route('/')
-def home_redirect():
+def home():
     """ Redirect user to list of users """
     return redirect('/users')
 
@@ -43,7 +44,7 @@ def create_user():
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
-    image_url = request.form['image_url']
+    image_url = request.form['image_url'] if request.form['image_url'] else None
 
     user = User(
         first_name=first_name,
@@ -61,7 +62,7 @@ def show_user_detail(user_id):
     """ Show detail information about a specific user and buttons to edit/
     delete user """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
 
     # TO DO: check if we can just input 'user' here
     return render_template('user_detail.html', user=user)
@@ -73,7 +74,7 @@ def show_user_edit(user_id):
         the detail page for a user and save button that updates the user
      """
 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
 
     return render_template('user_edit.html', user=user)
 
@@ -82,20 +83,11 @@ def show_user_edit(user_id):
 def show_edit_form(user_id):
     """ Process the edit form and returns the user to the /users page """
 
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    image_url = request.form['image_url']
+    user = User.query.get_or_404(user_id)
 
-    user = User.query.get(user_id)
-
-    if user.is_not_same_or_empty(first_name, 'first_name'):
-        user.first_name = first_name
-
-    if user.is_not_same_or_empty(last_name, 'last_name'):
-        user.last_name = last_name
-
-    if user.is_not_same_or_empty(image_url, 'image_url'):
-        user.image_url = image_url
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.image_url = request.form['image_url']
 
     db.session.commit()
 
@@ -103,12 +95,12 @@ def show_edit_form(user_id):
 
 
 @app.route('/users/<int:user_id>/delete', methods=['POST'])
-def show_user_edit(user_id):
+def delete_user(user_id):
     """ Delete the user """
-
-    user = User.query.get(user_id)
-
+    # note: potentially come back to this
+    user = User.query.get_or_404(user_id)
     db.session.delete(user)
+
     db.session.commit()
 
     return redirect('/users')
