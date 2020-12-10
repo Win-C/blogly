@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User Post{% endblock %}
+
+{% block content %}
+
+<h1>Edit Post</h1>
+
+<form action="/users/new" method="POST">
+    <div class="form-group">
+        <label for="edit-title">Title</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="edit-title" 
+          name = 'title' 
+          aria-describedby = "editTitleHelp" 
+          value = {{ post.title }}
+          required>
+      </div>
+      <div class="form-group">
+        <label for="edit-content">Content</label>
+        <textarea 
+          class="form-control" 
+          id="edit-content" 
+          name = 'content' 
+          rows = '3'
+          aria-describedby="contentHelp"
+          value = {{ post.content }}
+          required></textarea>
+      </div>
+      <button 
+        type="submit" 
+        class="btn btn-info"
+        formaction="/users/{{ user.id }}"
+        formmethod="GET">
+        Cancel</button>
+      <button 
+        type="submit" 
+        class="btn btn-success"
+        formaction="/posts/{{ post.id }}/edit"
+        formmethod="POST">
+        Edit</button>
+</form>
+
+{% endblock %}

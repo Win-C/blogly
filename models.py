@@ -28,5 +28,29 @@ class User(db.Model):
                           nullable=False,
                           default='https://hips.hearstapps.com/countryliving.cdnds.net/17/47/1511194376-cavachon-puppy-christmas.jpg')
 
+    posts = db.relationship('Post')
+
     def __repr__(self):
         return f"<User {self.id} {self.first_name} {self.last_name}>"
+
+
+class Post(db.Model):
+    """ Post. """
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    title = db.Column(db.String(50),
+                      nullable=False)
+    content = db.Column(db.Text,
+                        nullable=False,
+                        unique=True)
+    created_at = db.Column(db.DateTime,
+                           timezone=True,
+                           nullable=False)
+    userid = db.Column(db.Integer,
+                        db.ForeignKey('users.id')
+
+    user = db.relationship('User')
