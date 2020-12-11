@@ -51,6 +51,6 @@ class Post(db.Model):
                            nullable=False, 
                            default=datetime.now(timezone.utc))
     userid = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
+                       db.ForeignKey('users.id'), nullable=False)
 
-    user = db.relationship('User', backref = 'posts')
+    user = db.relationship('User', backref='posts')

@@ -145,7 +145,7 @@ def show_post(post_id):
 
 @app.route('/posts/<int:post_id>/edit')
 def show_post_edit(post_id):
-    """ Show a edit form fpr post based on post_id """
+    """ Show a edit form for post based on post_id """
 
     post = Post.query.get_or_404(post_id)
 
@@ -170,8 +170,9 @@ def edit_post(post_id):
 @app.route('/posts/<int:post_id>/delete', methods=['POST'])
 def delete_post(post_id):
     """ Delete the post """
-    user_id = Post.query.get_or_404(post_id).user.id
-    post = Post.query.filter_by(id=post_id).delete()
+    user_id = Post.query.get_or_404(post_id).userid
+
+    Post.query.filter_by(id=post_id).delete()
 
     db.session.commit()
 
