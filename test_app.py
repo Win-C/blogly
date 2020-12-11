@@ -97,7 +97,7 @@ class PostViewsTestCase(TestCase):
 
         Post.query.delete()
         User.query.delete()
-
+        # pass in None to image_url to turn into default URL in models.py
         user = User(first_name="Sylvia", last_name="Plath", image_url=None)
 
         db.session.add(user)
@@ -119,7 +119,7 @@ class PostViewsTestCase(TestCase):
 
         db.session.rollback()
 
-    def test_show_form(self):
+    def test_post_show_form(self):
         with app.test_client() as client:
             resp = client.get(f'/users/{self.user_id}/posts/new')
             html = resp.get_data(as_text=True)
@@ -133,8 +133,10 @@ class PostViewsTestCase(TestCase):
             "content": "new test test Yay?",
             "userid": self.user_id}
         with app.test_client() as client:
-            resp = client.post(f'/users/{self.user_id}/posts/new',
-                               data=d, follow_redirects=True)
+            resp = client.post(
+                f'/users/{self.user_id}/posts/new',
+                data=d, 
+                follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
@@ -146,13 +148,17 @@ class PostViewsTestCase(TestCase):
             "content": "test test yay",
             "userid": self.user_id}
         with app.test_client() as client:
-            resp = client.post(f'/posts/{self.post_id}/edit',
-                               data=d, follow_redirects=True)
+            resp = client.post(
+                f'/posts/{self.post_id}/edit',
+                data=d, 
+                follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Post Edit', html)
             self.assertIn('test test yay', html)
+
+    # add a test to show the edit form
 
     def test_post_delete(self):
         with app.test_client() as client:

@@ -119,11 +119,19 @@ def show_post_form(user_id):
 def add_post(user_id):
     """ Handle new post form; add post and redirect to the
         user detail page """
+    user = User.query.get_or_404(user_id)
 
     title = request.form['title']
     content = request.form['content']
 
-    user = User.query.get_or_404(user_id)
+    if not title: 
+        # flash message
+        data = { 
+            'title': title,
+            'content':content,
+            'user': user}
+        return render_template('new_post.html', user=data)
+
 # could also append to user.post
 # also backend validation
     new_post = Post(title=title,
