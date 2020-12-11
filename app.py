@@ -32,14 +32,14 @@ def show_users():
 
 
 @app.route('/users/new')
-def show_add_form():
+def show_user_add_form():
     """ Show form to create user. """
 
     return render_template('user_create.html')
 
 
 @app.route('/users/new', methods=['POST'])
-def create_user():
+def user_add():
     """ Given form inputs, create a new user instance and redirect to /users """
 
     first_name = request.form['first_name']
@@ -97,13 +97,14 @@ def show_edit_form(user_id):
 @app.route('/users/<int:user_id>/delete', methods=['POST'])
 def delete_user(user_id):
     """ Delete the user """
-
+#fix to delete posts to delete user
     user = User.query.filter_by(id=user_id).delete()
 
     db.session.commit()
 
     return redirect('/users')
 
+#########################################################################
 
 @app.route('/users/<int:user_id>/posts/new')
 def show_post_form(user_id):
@@ -123,7 +124,8 @@ def add_post(user_id):
     content = request.form['content']
 
     user = User.query.get_or_404(user_id)
-
+# could also append to user.post
+# also backend validation
     new_post = Post(title=title,
                     content=content,
                     userid=user.id)
@@ -144,7 +146,7 @@ def show_post(post_id):
 
 
 @app.route('/posts/<int:post_id>/edit')
-def show_post_edit(post_id):
+def show_post_edit_form(post_id):
     """ Show a edit form for post based on post_id """
 
     post = Post.query.get_or_404(post_id)
@@ -158,7 +160,7 @@ def edit_post(post_id):
         post view """
 
     post = Post.query.get_or_404(post_id)
-
+# Remember to validate title
     post.title = request.form['title']
     post.content = request.form['content']
 
